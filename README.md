@@ -8,29 +8,26 @@ And papers here: [***English version***](https://github.com/Coldog2333/Financial
 
 Experiment
 ====
-Correlation Between Sentimental Factor and SSE
+Correlation Between Sentimental Factor and Chinese Markets
 -------
 <p class="half" align="center">
   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/Correlation_Between_Sentimental_Factor_and_SSE(en).png" width="350px" height="350px"/>
-</p>
-
-Correlation Between Sentimental Factor and SZSE
--------
-<p class="half" align="center">
   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/Correlation_Between_Sentimental_Factor_and_SZSE(en).png" width="350px" height="350px"/>
 </p>
 
 
-Time Series of Sentimental Factor and SSE
+Time Series of Sentimental Factor and Chinese Markets
 -------
++ As for SSE,
+
 <p class="half" align="center">
-   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/senti-score_vs_SSE(en).png" width="350px" height="350px"/>
+   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/senti-score_vs_SSE(en).png" width="800px" height="402px"/>
 </p>
 
-Time Series of Sentimental Factor and SZSE
--------
++ As for SZSE,
+
 <p align="center">
-   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/senti-score_vs_SZSE(en).png" width="350px" height="350px"/>
+   <img src="https://github.com/Coldog2333/Financial-NLP/blob/master/figure/senti-score_vs_SZSE(en).png" width="800px" height="402px"/>
 </p>
 
 Contribution
