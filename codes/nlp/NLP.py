@@ -29,7 +29,8 @@ import datetime
 
 zh_symbol=['！','？','，','。','【','】','（','）','￥','…','—','《','》','”','“','：','；','、','‘','’']
 number=['0','1','2','3','4','5','6','7','8','9']
-
+letter=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']    
 
 # NLP 工具类
 class NLP:
@@ -115,7 +116,7 @@ class NLP:
         self.Label_dict.update(dict(zip(neg,[-1]*len(neg))))
         
         
-    def cut(self, origin_file, cut_file='', remove_stopwords=False, swith_to_newtxt=False, delflag= True, keepflag=1):
+    def cut(self, origin_file, cut_file='', remove_stopwords=False, swith_to_newtxt=False, delflag= True):
         """
         Parameters
             ----------
@@ -134,10 +135,22 @@ class NLP:
         Returns
             if swith_to_newtxt==False : Nothing
             if swith_to_newtxt==True  : name of cut_file
+            
+        Tips:
+            When cutting for training, I advice you should set
+                + remove_stopwords = False
+                + switch_to_newtxt = True
+                + delflag=False
+            When cutting a raw new text, I advice you should set
+                + remove_stopwords = True
+                + delflag=True
         """
         print('start cutting...\n')
         prev_time = datetime.datetime.now() #当前时间  
-        cut_file=origin_file.split('.')[0]+'_cut.'+origin_file.split('.')[1]
+        
+        if cut_file=='':    # 若没有指定cut file文件名则默认放在original file同一位置下。
+            cut_file=origin_file.split('.')[0]+'_cut.'+origin_file.split('.')[1]
+        # 兼容utf-8和gbk编码
         try:
             fp=open(origin_file,'r',encoding='utf-8')
             raw_text=fp.read()      #text without cutting
@@ -147,20 +160,24 @@ class NLP:
             raw_text=fp.read()      #text without cutting
             code='gbk'
         fp.close()
-        words=jieba.cut(raw_text,cut_all=False)
-        str_cut=' '.join(words)
+        
+        words = jieba.cut(raw_text, cut_all=False, HMM=True)
+        str_cut=' '.join(words) # 未经任何处理的分词后字符串
+        
         if delflag is True:
             for sym in zh_symbol: # remove chinese symbols
                 str_cut=str_cut.replace(sym,'')
             for sym in number:    # remove number
-                str_cut=str_cut.replace(sym,'')    
+                str_cut=str_cut.replace(sym,'')
+            for sym in letter:    # remove english letter
+                str_cut=str_cut.replace(sym,'')
             strlist_cut=str_cut.split(' ')
-            for string in strlist_cut: # remove english letter
+            """for string in strlist_cut: # remove english letter
                 try:
                     if (string[0]>='A' and string[0]<='Z') or(string[0]>='a' and string[0]<='z'):
                         strlist_cut.remove(string)
                 except:
-                    continue
+                    continue"""
         
         if(remove_stopwords==True):
             strlist_new=[]
@@ -170,18 +187,24 @@ class NLP:
                 else:
                     strlist_new.append(word)
             str_cut=' '.join(strlist_new)
-        fp=open(cut_file,'w',encoding=code)
-        fp.writelines(str_cut)
+        # 兼容处理，若用户还没有创建cut文件夹就开始创建文件
+        try:
+            fp=open(cut_file,'w',encoding=code)
+        except Exception as e:
+            if(type(e)==FileNotFoundError):
+                os.mkdir(os.path.split(cut_file)[0])
+                fp=open(cut_file,'w',encoding=code)
+            else:
+                raise e
+        fp.writelines(str_cut)  # 将分词后文本数据写入文件
         fp.close()
-        
-        if keepflag==False:
-            os.remove(cut_file)
         
         cur_time = datetime.datetime.now()  #分词后此时时间
         h, remainder = divmod((cur_time - prev_time).seconds, 3600)
         m, s = divmod(remainder, 60)    
         print('done.') 
         print("It costs %02d:%02d:%02d to cut." % (h, m, s))
+        
         if swith_to_newtxt:
             return cut_file
         
@@ -282,7 +305,7 @@ class NLP:
                 minimum frequence can a word record on dictionary.
         Returns
             Nothing
-        """        
+        """
         print('start training...')
         prev_time = datetime.datetime.now() #当前时间    
         
@@ -433,13 +456,15 @@ class NLP:
         return similarity
 
 
-    def txt2wordbag(self, origin_file, cutflag=True, remove_stopwords=True): #testing
+    def txt2wordbag(self, origin_file, cutflag=False, remove_stopwords=True): #testing
         """
         please remember to set a corresponding processing file.
         """
-        if(cutflag):
+        if origin_file.split('.')[0][-3:]!='cut':
             cut_file=self.cut(origin_file, remove_stopwords=True, swith_to_newtxt=True)
-            
+        else:
+            cut_file=origin_file
+    
         try:
             fp=open(cut_file,'r',encoding='utf-8')
             rawtxt=fp.read()

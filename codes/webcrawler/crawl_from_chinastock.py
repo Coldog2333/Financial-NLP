@@ -13,7 +13,7 @@ import datetime
 import threading
 import multiprocessing
 
-work_space=r'D://Mainland/Campus Life/ZXtrainee/codes'
+work_space=r'D:/Mainland/Campus Life/ZXtrainee'
 invalid_char=['|','.',':',',','*','\\','/','/','?','"']
 
 def sdtime(time):
@@ -50,6 +50,7 @@ def goto_npage(x, section, n=1):
     """
     url_format='http://www.chinastock.com.cn/information.do?methodCall=newsList&id=zxzx_'+decode[section][0]+'&pageNum='+str(n)+'&pageSize=20'
     x.get(url_format)
+
 
 if not os.path.exists(work_space+'/article'):
     os.makedirs(work_space+'/article')
@@ -217,7 +218,7 @@ def parallel_download_all_section(*arg):
 
 if __name__=='__main__':
     prev_time = datetime.datetime.now() #当前时间
-    parallel_download_all_section(1,3)
+    parallel_download_all_section(1,500)
     cur_time = datetime.datetime.now()  #训练后此时时间
     h, remainder = divmod((cur_time - prev_time).seconds, 3600)
     m, s = divmod(remainder, 60)
