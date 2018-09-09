@@ -27,12 +27,11 @@ $\{Jiangjf6,lijh76\}@mail2.sysu.edu.cn$
 
 \maketitle
 \begin{abstract}
-
-In this paper, we design an integrated algorithm to evaluate the sentiment of Chinese market. Firstly, with the help of the web browser automation, we crawl a lot of news and comments from several influential financial websites automatically. Secondly, we use techniques of Natural Language Processing(NLP) under Chinese context, including tokenization, Word2vec word embedding and semantic database WordNet, to compute Senti-scores of these news and comments, and then construct the sentimental factor. Here, we build a finance-specific sentimental lexicon so that the sentimental factor can reflect the right market condition. Thirdly, we also implement an adjustment of the original sentimental factor after computing it. Our experiment result shows that there is a significant correlation between our sentimental factor and the Chinese market, and the adjusted factor is even more informative, having a stronger correlation with the Chinese market. Therefore, the sentimental factor can be an important reference when making investment decisions. Especially during the Chinese market crash in 2015, the Pearson correlation coefficient of adjusted sentimental factor with SSE is 0.5844, which suggests that our model can provide a solid guidance, especially in the special period when the market is influenced greatly by public sentiment.
+In this paper, we design an integrated algorithm to evaluate the sentiment of Chinese market. Firstly, with the help of the web browser automation, we crawl a lot of news and comments from several influential financial websites automatically. Secondly, we use techniques of Natural Language Processing(NLP) under Chinese context, including tokenization, Word2vec word embedding and semantic database WordNet, to compute Senti-scores of these news and comments, and then construct the sentimental factor. Here, we build a finance-specific sentimental lexicon so that the sentimental factor can reflect the sentiment of financial market but not the general sentiments as happiness, sadness, etc. Thirdly, we also implement an adjustment of the standard sentimental factor. Our experimental performance shows that there is a significant correlation between our standard sentimental factor and the Chinese market, and the adjusted factor is even more informative, having a stronger correlation with the Chinese market. Therefore, our sentimental factors can be important references when making investment decisions. Especially during the Chinese market crash in 2015, the Pearson correlation coefficient of adjusted sentimental factor with SSE is 0.5844, which suggests that our model can provide a solid guidance, especially in the special period when the market is influenced greatly by public sentiment.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Natural Language Processing; Word2Vec; WordNet; Sentimental Analysis;
+Natural Language Processing; Word2Vec; WordNet; Sentiment Analysis;
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
@@ -96,7 +95,7 @@ Maximizing the likelihood function above minimize the following loss function,
 -\frac{1}{T} \sum_{t=1}^{T}\sum_{-m \leq j \leq m, j\neq 0, 1\leq t+j \leq \big|T\big|}log P(w^{(t+j)}\big|w^{(t)})
 \end{equation}
 
-Denote the vectors of center words and background words with \textbf{v} and \textbf{u}, that is, as for a word with index \textit{i}, $\textbf{v}_{i}$ and $\textbf{u}_{i}$ are the vectors when it is as center word and background word. And the parameters of model we want to train are the two kinds of vectors of every words. 
+Denote the vectors of center words and background words with \textbf{v} and \textbf{u}, that is, as for a word with index \textit{i}, $\textbf{v}_{i}$ and $\textbf{u}_{i}$ are the vectors when it is as center word and background word. And the parameters of model we want to train are the two kinds of vectors of every words.
 
 In order to implement the model parameters into loss function, we should express the conditional probabilities of background word under given center word with model parameters. Assume that generating each background words is independent mutually when center word is given, then as for the center word $w_{c}$ and the background word $w_{b}$, b, c are the indexes of them in the dictionary. Such that, the probability of generating background word $w_{b}$ under the given center word $w_{c}$ can be defined by softmax function, as
 
@@ -182,7 +181,7 @@ In general, we will use the background word vector of CBOW as the word vector of
 \vspace{0.5cm}
 \subsection{\underline{WordNet}}
 
-WordNet is a large lexical database of English. In WordNet, synsets are interlinked by means of conceptual-semantic and lexical relations. The main relation between words in WordNet is synonym[\hyperref[ref 3]{3}]. By using a network to show the relation between words, WordNet helps us find synonym of words and also shows how two words are similar with each other in the perspective of meanings.
+WordNet is a large lexical database of English. In WordNet, synsets are interlinked by means of conceptual-semantic and lexical relations. The main relation between words in WordNet is synonym[\hyperref[ref 3]{3}]. By using a network to show the relation between words, WordNet helps us find synonym of words and also shows how two much words are similar with each other in the perspective of meanings.
 
 \begin{figure}[ht]
 \centering
@@ -190,14 +189,14 @@ WordNet is a large lexical database of English. In WordNet, synsets are interlin
 \caption{An Example of the Structure of WordNet[\hyperref[ref 4]{4}]}
 \end{figure}
 
-Having the properties above makes WordNet more reliable to analyze the sentiment. Chinese Open Wordnet is a large scale, freely available, semantic dictionary of Mandarin Chinese inspired by WordNet[\hyperref[ref 5]{5}]. It has the same structure and principles as WordNet but based on Chinese. It contains 42,315 synsets, 79,812 senses and 61,536 unique words and the construction is still ongoing. Our research mainly uses COW to compute the Senti-score of each single words.
+Having the properties above makes WordNet more reliable to analyze the sentiment. However, when using NLP under Chinese context, we should also translate Chinese to English at first. Thanks to the contributors of Chinese Open Wordnet (COW), as for a Chinese word, we can conveniently find the corresponding meaning in English, namely, we can find the corresponding node of this Chinese word in WordNet. COW is a large scale, freely available, semantic dictionary of Mandarin Chinese inspired by WordNet[\hyperref[ref 5]{5}]. It has the same structure and principles as WordNet but based on Chinese. It contains 42,315 synsets, 79,812 senses and 61,536 unique words and the construction is still ongoing. Our research mainly uses COW to compute the Senti-score of each single words.
 
 \section{Methodology}
 \subsection{\underline{Data Mining}}
 
-In order to gain plenty of financial news, we use selenium\footnote{\href{https://www.seleniumhq.org/}{https://www.seleniumhq.org/}} to crawl the network. We get the historical data automatically and use them to compute Senti-score.
+In order to gain plenty of financial news, we use selenium\footnote{\href{https://www.seleniumhq.org/}{https://www.seleniumhq.org/}} to crawl the news from network. We collect the historical data automatically and use them to compute historical Senti-scores.
 
-We crawl from Xueqiu, bjzq (Beijing Securities website) and Chinastock. We find that Chinastock contains articles from a much longer time and broader areas. The sources of Chinastock already include many financial website. As a result, we choose Chinastock to do text data crawling.
+At first we crawl from Xueqiu, bjzq (Beijing Securities website) and Chinastock. But later we find that Chinastock contains articles from a much longer time and broader areas. The sources of Chinastock already include many financial websites. As a result, we choose Chinastock to do text data crawling.
 
 In order to do back testing more conveniently, we sort the text data by date.
 
@@ -230,6 +229,8 @@ which indicates the morphological similarity of two words $w_{1}$ and $w_{2}$.
 
 \textbf{Note}: Though now we can estimate the similarity of two words with word2vec, what we achieve above is only the similarity morphologically. That is to say, we can just find out which words are similar with a specified word morphologically, but do not know their meanings. Let's take an easy example, consider two words 'increase' and 'decrease', we can often read such a sentence 'The .DJI increases by 5 percent today' on the financial news, and you will find it certainly possible to exchange 'increase' into 'decrease' in this sentence without any difficulty. As known in \textbf{2.2}, the word vectors of this two words will approximately be the same, which may make us confused in determine their respective Senti-scores. But, what deserves to be mentioned is that word2vec does help us to find out some words familiar with a given word in a manner.
 
+Facing this embarrassing situation, we propose a relatively well method in \textbf{\underline{\textit{D.Senti-score of Words}}}.
+
 \subsubsection{\underline{Semantics Similarity}}
 
 As mentioned in \textbf{2.3}, WordNet uses trees to record words. The structure of trees defines distances naturally. When computing the semantic similarity of words using WordNet, we use the shortest path linking the two nodes representing the words to compute. Take the reciprocal of the shortest path of the two nodes as the similarity. The similarity between a word and itself is 1. We also define the similarity between two words is 0 if there is no path linking them. With definitions above, the semantics similarity we compute will be a value between 0 and 1. The larger the value is, the more similar the two words are semantically.
@@ -237,9 +238,29 @@ As mentioned in \textbf{2.3}, WordNet uses trees to record words. The structure 
 \subsection{\underline{Senti-score Computation}}
 \subsubsection{\underline{Sentiment Lexicon}}
 
-We define a sentiment lexicon as a small tally set to evaluate the sentiment of a single word. The idea is that it is possible to reflect the sentiment of a word by calculating the similarity of this word with the word in sentiment lexicon, which we initialize its sentiment. We choose 100 words that appear in financial news frequently and also have specific sentiment as our label words. On the other hand, in order to make the computation more fair, we choose 50 words that have positive attitude toward the market (positive words) and the other 50 have the opposite sentiment (negative words). Before computing the Senti-score of a piece of new, we firstly compute both the morphological similarity and the semantics similarity with the label words.
+Generally in sentiment analysis, we will build a sentiment lexicon to tell our model that which words are positive or negative. It inspires us to define our specific sentiment lexicon so that our model can output the sentiment which reflects financial market.
+
+Then, we define a sentiment lexicon as a small tally set to evaluate the sentiment of a single word. The idea is that it is possible to reflect the sentiment of a word by calculating the similarity of this word with the word in sentiment lexicon, which we initialize its sentiment. We choose 100 words that appear in financial news frequently and also have specific sentiment as our label words. On the other hand, in order to make the computation more fair, we choose 50 words that have positive attitude toward the market (positive words) and the other 50 have the opposite sentiment (negative words). Before computing the Senti-score of a piece of new, we firstly compute both the morphological similarity and the semantics similarity with the label words of every single word.
+
+\hyperref[Table 1]{Table 1} provides some words in our sentiment lexicon as an example. The whole sentiment lexicon displays in our codes on our GitHub.\footnote{\href{https://github.com/Coldog2333/Financial-NLP}{https://github.com/Coldog2333/Financial-NLP}}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{c|c}
+        \hline
+        \textbf{Positive} & \textbf{Negative}\\
+        \hline
+        {bullish} & {bearish} \\
+        {climb} & {fall} \\
+        {surge} & {slump} \\
+        {...} & {...} \\
+        {hortation} & {sanction} \\
+        \hline
+    \end{tabular}
+    \caption{Sentiment Lexicon}\label{Table 1}
+\end{table}
 
 \subsubsection{\underline{Senti-score of Words}}
+
 With the computation above, we will have a vector of 200 dimensions for every word. The first 100 dimensions are the Word2vec similarities with the 100 words in the sentiment lexicon. They show the morphological similarity with the label words in sentiment lexicon. The last 100 dimensions, on the other hand, are the WordNet similarities with the 100 words in the sentiment lexicon, which represent the semantic similarity with the label words. Since the words in the sentiment lexicon show attitudes toward the market, based on the similarities above, we can evaluate the attitude of a specific word, namely the sentiment of it. To represent the sentiment quantitatively, we define a value called Senti-score.
 
 In our research, we use the similarity vector to compute the Senti-score of every word. In specific, the process includes the following steps: (1)Use the Word2vec similarity and the WordNet similarity respectively. Then use collaborative filtering to classify it as positive word or negative word. (2)Use Word2vec similarity to compute the Senti-score. The specific process and the reasons behind are as followed.
@@ -253,6 +274,7 @@ A problem we have to face is that the words included in the COW is far less than
 Up to now, we can compute the Senti-score of every single word.
 
 \subsubsection{\underline{Senti-score of Articles and Sentimental Factor}}
+
 Use the Senti-scores of words above, we can compute the Senti-score of every piece of news. By adding up all the Senti-score of news in a day, we will get the sentimental factor we need. Details are as follows.
 
 After the pretreatment, we will get a word bag. It is straight-forward to compute the similarity vector of each word in the word bag and use these vectors to compute the Senti-scores. However, it is not efficient and not necessary. Too many words will be computed for many times. The fact is, if we compute the Senti-socres of the most commonly used words in advance, we can get the Senti-score of an article much quicker and much more efficient.
@@ -274,45 +296,89 @@ We need a criterion to evaluate the efficiency of the sentimental factor. The ma
 
 \vspace{0.5cm}
 
+\section{\underline{Baseline}}
+
+\textbf{Random.} We randomly create some series of real numbers as a random factor to compare with our sentimental factor. The one is generated by uniform distribution, which scales from the minimum to the maximum of our sentimental factor. Another is generated by normal distribution, which has the mean and the standard deviation same as our sentimental factor.
+
+\textbf{Temperature.} Edward M. Saunders Jr.[\hyperref[ref 8]{8}] proposed that weather can also influent the financial market. To see whether our complex sentimental factor can outperform than the simply found factor, we compare it with our sentimental factor as a baseline. We download climatic data from NNDC.\footnote{\href{https://www7.ncdc.noaa.gov/CDO/cdoselect.cmd}{https://www7.ncdc.noaa.gov/CDO/cdoselect.cmd}} We especially choose the climatic data in Shanghai and Guangzhou.
+
 \section{\underline{Experimental Results and Discussion}}
 
-We calculate the Senti-score of 1379 market days from 2012/11/6 to now, and make a correlation analysis about Senti-score and some market indexes like SSE and SZSE.
+We calculate the standard sentimental factor of 1379 market days from 2012/11/6 to now, and make a correlation analysis about the standard sentimental factor and some market indexes like SSE and SZSE.
 
-Linear regression is carried out with them, and we can see that all of the coefficients successfully pass significance test.
+Linear regression is carried out with them, and we can see that all of the coefficients successfully pass significance test in \hyperref[Table 2]{Table 2} and \hyperref[Table 3]{Table 3}.
 
 \begin{table}[h]
-\caption{The regression result of Sentimental factor with SSE}
+\caption{The regression result of the standard sentimental factor with SSE}\label{Table 2}
 \centering
 \begin{tabular}{c|c}
 \hline
-{Sentimental factor} & 11138.27 ***\\
+{standard sentimental factor} & 11138.27 ***\\
 {p} & (3.48e-12) \\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[h]
-\caption{The regression result of Sentimental factor with SZSE}
+\caption{The regression result of the standard sentimental factor with SZSE}\label{Table 3}
 \centering
 \begin{tabular}{c|c}
 \hline
-{Sentimental factor} & 39796.6 ***\\
+{standard sentimental factor} & 39796.6 ***\\
 {p} & ($<$2e-16) \\
 \hline
 \end{tabular}
 \end{table}
 
-This time the Pearson correlation coefficient is 0.1851, which states the Sentiment factor has a weak dependence with the market index. However, when we adopt the adjusted Sentiment factor and apply a similar analysis, we can find that the Pearson correlation coefficient is 0.3152, which is improved a lots.
+This time the Pearson correlation coefficient is 0.18731 (with SSE), which states the standard sentimental factor has a weak dependence with the market index. However, when we adopt the adjusted sentiment factor and apply a similar analysis, we can find that the Pearson correlation coefficient is 0.26119, which is improved a lots.
 
-Especially, we do another experiment in the time of the China stock market crash, from 2015/02/11 to 2015/09/11. We compute the Senti-score of 139 market days of this year, and similarly make a correlation analysis about Senti-score with SSE and SZSE.
+Especially, we do another experiment during the period of the China stock market crash, from 2015/02/11 to 2015/09/11. We compute the sentimental factor of 139 market days of this year, and similarly make a correlation analysis about the sentimental factor with SSE and SZSE.
 
-This time the Pearson correlation coefficient is 0.3424, which states the Sentiment factor has a medium dependence with the market index. Moreover, when we adopt the adjusted Sentiment factor and apply a similar analysis, we can find that the Pearson correlation coefficient is 0.5844, which shows a higher dependence. What's more, when we make a time series analysis, we can see that especially during the period of the stock market crash, the Senti-score moves almost the same as the market index.
+This time the Pearson correlation coefficient is 0.36284, which states the Sentiment factor has a medium dependence with the market index. Moreover, when we adopt the adjusted Sentiment factor and apply a similar analysis, we can find that the Pearson correlation coefficient is 0.58815, which shows a higher dependence. What's more, when we make a time series analysis, we can see that especially during the period of the stock market crash, the sentimental factor moves almost the same as the market index.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale=0.18]{senti-score_vs_SSE(en)_2015.png}
 \caption{Time Series of 10d Average Senti-score and SSE during the crash}
 \end{figure}
+
+Meanwhile, we apply the similar correlation analysis about the random factor and temperature with SSE and SZSE, and the complete result displayed on \hyperref[Table 4]{Table 4} and \hyperref[Table 5]{Table 5}. For reducing random errors, when we applying correlation analysis on random factor, we create 1000 series of real numbers and compute the average of these 1000 Pearson correlation coefficient as the final result.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ccc}
+        \hline
+        \textbf{Pearson correlation coefficient}\\
+        \hline
+        {} & {SSE} & {SZSE} \\
+        \hline
+        {random from uniform} & {-0.00049399} & {-0.0005597} \\
+        {random from normal} & {0.00017451} & {0.00016782} \\
+        {temperature} & {-0.025135} & {-0.063723}\\
+        {standard sentimental factor} & {0.18731} & {0.22595}\\
+        {adjusted sentimental factor} & {\textbf{0.26119}} & {\textbf{0.28472}}\\
+        \hline
+    \end{tabular}
+    \caption{Pearson correlation coefficient from 2012/11/6 to 2018/8/17}\label{Table 4}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ccc}
+        \hline
+        \textbf{Pearson correlation coefficient}\\
+        \hline
+        {} & {SSE} & {SZSE} \\
+        \hline
+        {random from uniform} & {0.0011922} & {0.0010882} \\
+        {random from normal} & {0.00055439} & {0.00050227} \\
+        {temperature} & {0.10125} & {0.064122}\\
+        {standard sentimental factor} & {0.36284} & {0.37204}\\
+        {adjusted sentimental factor} & {\textbf{0.58815}} & {\textbf{0.58042}}\\
+        \hline
+    \end{tabular}
+    \caption{Pearson correlation coefficient from 2015/2/11 to 2015/9/11}\label{Table 5}
+\end{table}
 
 From then on, we see that our model can provide a satisfied guide meaning, especially in the special period, namely the period which is influenced greatly by public sentiment.
 
@@ -342,33 +408,50 @@ Building the Chinese Wordnet (COW): Starting from Core Synsets. In Proceedings o
 Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S., \& Dean, J. (2013). Distributed representations of words and phrases and their compositionality. In Advances in neural information processing systems (pp. 3111-3119). \label{ref 6}
 \bibitem{IEEEhowto:kopka}
 Rao T, Srivastava S. Analyzing Stock Market Movements Using Twitter Sentiment Analysis[C]// International Conference on Advances in Social Networks Analysis and Mining. IEEE Computer Society, 2012:119-123. \label{ref 7}
+\bibitem{IEEEhowto:kopka}
+Jr E M S. Stock prices and the Wall Street weather[J]. American Economic Review, 1993, 83(3):p¨¢gs. 1337-1345. \label{ref 8}
 \end{thebibliography}
+
 \section{Appendix}
 \subsection{Figure}
 
 \newpage
+%\begin{figure}[ht]
+%\begin{minipage}[t]{1\linewidth}
+%\centering
+%\includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SSE(en).png}
+%\caption{Correlation Between Sentimental Factor an SSE}
+%\label{fig:side:a}
+%\end{minipage}%
+%\begin{minipage}[t]{1\linewidth}
+%\centering
+%\includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SZSE(en).png}
+%\caption{Correlation Between Sentimental Factor an SZSE}
+%\label{fig:side:b}
+%\end{minipage}
+%\end{figure}
+
 \begin{figure}[ht]
-\begin{minipage}[t]{1\linewidth}
-\centering
-\includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SSE(en).png}
-\caption{Correlation Between Sentimental Factor an SSE}
-\label{fig:side:a}
-\end{minipage}%
-\begin{minipage}[t]{1\linewidth}
-\centering
-\includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SZSE(en).png}
-\caption{Correlation Between Sentimental Factor an SZSE}
-\label{fig:side:b}
-\end{minipage}
+  \centering
+  \includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SSE(en).png}
+  \caption{Correlation Between Sentimental Factor an SSE}
 \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.60]{Correlation_Between_Sentimental_Factor_and_SZSE(en).png}
+  \caption{Correlation Between Sentimental Factor an SZSE}
+\end{figure}
+
 \begin{figure*}[ht]
-\centering
-\includegraphics[width=\textwidth]{senti-score_vs_SSE(en).png}
-\caption{Time Series of 10 Days Average Senti-score and SSE}
+  \centering
+  \includegraphics[width=\textwidth]{senti-score_vs_SSE(en).png}
+  \caption{Time Series of 10 Days Average Senti-score and SSE}
 \end{figure*}
+
 \begin{figure*}[ht]
-\centering
-\includegraphics[width=\textwidth]{senti-score_vs_SZSE(en).png}
-\caption{Time Series of 10 Days Average Senti-score and SZSE}
+  \centering
+  \includegraphics[width=\textwidth]{senti-score_vs_SZSE(en).png}
+  \caption{Time Series of 10 Days Average Senti-score and SZSE}
 \end{figure*}
 \end{document}
