@@ -4,7 +4,7 @@
 Introduction
 ====
 Natural language processing, as one of the most promising fields of machine learning, has achieved great development recently and has been used in financial market. In this project, we are aiming to use an algotithm to analyze text data from influential financial websites to construct a sentimental factor which represents the daily sentiment of the market.  
-And papers here: [***English version***](https://github.com/Coldog2333/Financial-NLP/tree/master/paper/Constructing%20Financial%20Sentimental%20Factors%20in%20Chinese%20Market%20Using%20Techniques%20of%20Natural%20Language%20Processing.pdf) and [***中文版***](https://github.com/Coldog2333/Financial-NLP/tree/master/paper/%E5%88%A9%E7%94%A8%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E6%8A%80%E6%9C%AF%E6%9E%84%E5%BB%BA%E4%B8%AD%E5%9B%BD%E5%B8%82%E5%9C%BA%E9%87%91%E8%9E%8D%E8%88%86%E6%83%85%E5%9B%A0%E5%AD%90.pdf).
+And papers here: [***English version***](https://github.com/Coldog2333/Financial-NLP/blob/master/paper/Constructing%20Financial%20Sentimental%20Factors%20in%20Chinese%20Market%20Using%20Natural%20Language%20Processing.pdf) and [***中文版***](https://github.com/Coldog2333/Financial-NLP/blob/master/paper/%E5%88%A9%E7%94%A8%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E6%8A%80%E6%9C%AF%20%E6%9E%84%E5%BB%BA%E4%B8%AD%E5%9B%BD%E5%B8%82%E5%9C%BA%E9%87%91%E8%9E%8D%E8%88%86%E6%83%85%E5%9B%A0%E5%AD%90.pdf).
 
 Experiment
 ====
