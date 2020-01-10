@@ -54,7 +54,6 @@ Python Version
 
 Modules needed
 -------
-- ***os***
 - ***six***
 - ***codec***
 - ***logging***
@@ -66,7 +65,6 @@ Modules needed
 - ***pandas*** 
 - ***threading***
 - ***datetime***
-- ***time***
 
 
 Contact
